@@ -1,5 +1,6 @@
 <template>
-    <div class="app-wrapper" :class="classObj">
+    <div class="app-wrapper">
+        11111111111111111111111111
         <div class="main-container">
             <navbar></navbar>
         </div>
@@ -13,6 +14,9 @@
         name: "Layout",
         components: {
             Navbar
+        },
+        computed: {
+
         }
     }
 </script>

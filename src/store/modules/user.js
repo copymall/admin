@@ -1,4 +1,6 @@
 import {getToken, removeToken} from "@/utils/auth";
+import {getInfo, login} from "../../api/login";
+import {setToken} from "../../utils/auth";
 
 const user = {
     state: {
@@ -24,6 +26,22 @@ const user = {
     },
 
     actions: {
+        // 登录
+        Login({ commit }, userInfo) {
+            const username = userInfo.username.trim()
+            return new Promise((resolve, reject) => {
+                login(username, userInfo.password).then(response => {
+                    const data = response.data
+                    const tokenStr = data.tokenHead+data.token
+                    setToken(tokenStr)
+                    commit('SET_TOKEN', tokenStr)
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+
         GetInfo({commit}) {
             return new Promise((resolve, reject)=>{
                 getInfo().then(response => {

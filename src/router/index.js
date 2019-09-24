@@ -4,8 +4,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import Layout from '../views/layout/Layout';
+import Login from  '../views/login'
 
 export const constantRouterMap = [
+    {path: '/login', component: Login, hidden: true},
     {
         path:'',
         component: Layout,
