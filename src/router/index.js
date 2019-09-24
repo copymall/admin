@@ -18,6 +18,24 @@ export const constantRouterMap = [
             component: ()=> import('@/views/home/index'),
             meta: {title: '首页', icon: 'home'}
         }]
+    },
+    {path:'/pms',
+        component:Layout,
+        redirect: '/pms/product',
+        name: 'pms',
+        meta: {title: '商品', icon: 'product'},
+        children: [{
+            path: 'product',
+            name: 'product',
+            component: ()=> import('@/views/pms/product/index'),
+            meta: {title: '商品列表', icon: 'product-list'}
+        },
+            {
+                path: 'product',
+                name: 'product',
+                component: ()=> import('@/views/pms/product/index'),
+                meta: {title: '商品列表2', icon: 'product-list'}
+            }]
     }
 ]
 
