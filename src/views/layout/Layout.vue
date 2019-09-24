@@ -1,6 +1,5 @@
 <template>
     <div class="app-wrapper">
-        11111111111111111111111111
         <div class="main-container">
             <navbar></navbar>
         </div>
@@ -8,7 +7,8 @@
 </template>
 
 <script>
-    import { Navbar } from "@/views/layout/components";
+
+    import Navbar from "./components/Navbar";
 
     export default {
         name: "Layout",

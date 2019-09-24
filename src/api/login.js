@@ -18,3 +18,10 @@ export function getInfo() {
         method:'get'
     })
 }
+
+export function logout() {
+    return request({
+        url: '/admin/logout',
+        method: 'post'
+    })
+}
