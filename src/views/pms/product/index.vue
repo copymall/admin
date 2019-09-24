@@ -41,6 +41,21 @@
             <span>数据列表</span>
             <el-button class="btn-add" size="mini">添加</el-button>
         </el-card>
+        <div class="table-container">
+            <el-table ref="productTable" style="width: 100%" border>
+                <el-table-column type="selection" width="60" align="center"></el-table-column>
+                <el-table-column label="编号" width="100" align="center">
+                    <template slot-scope="scope"></template>
+                </el-table-column>
+                <el-table-column label="图片" width="120" align="center"></el-table-column>
+                <el-table-column label="商品名称" align="center"></el-table-column>
+                <el-table-column label="价格/货号" width="120" align="center"></el-table-column>
+                <el-table-column label="标签" width="140" align="center"></el-table-column>
+                <el-table-column label="排序" width="100" align="center"></el-table-column>
+                <el-table-column label="SKU库存" width="100" align="center"></el-table-column>
+
+            </el-table>
+        </div>
     </div>
 </template>
 
