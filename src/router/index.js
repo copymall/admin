@@ -41,6 +41,21 @@ export const constantRouterMap = [
             meta:{title:'修改商品', icon:'product-add'},
             hidden: true
         }]
+    },
+    {
+        path:'/oms',
+        component:Layout,
+        redirect:'/oms/order',
+        name:'oms',
+        meta:{title:'订单',icon:'order'},
+        children:[
+            {
+                path:'order',
+                name:'order',
+                component:()=>import('@/views/oms/order/index'),
+                meta: {title: '订单列表',icon:'product-list'}
+            },
+        ]
     }
 ]
 
