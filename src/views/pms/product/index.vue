@@ -98,9 +98,29 @@
                         <el-button type="primary" icon="el-icon-edit" @click="handleShowSkuEditDialog(scope.$index, scope.row)" circle=""></el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="销量" width="100" align="center"></el-table-column>
-                <el-table-column label="审核状态" width="100" align="center"></el-table-column>
-                <el-table-column label="操作" width="160" align="center"></el-table-column>
+                <el-table-column label="销量" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.sale}}</template>
+                </el-table-column>
+                <el-table-column label="审核状态" width="100" align="center">
+                    <template slot-scope="scope">
+                        <p>{{scope.row.verifyStatus | verifyStatusFilter}}</p>
+                        <p>
+                            <el-button type="text" @click="handleShowVerifyDetail(scope.$index, scope.row)">审核详情</el-button>
+                        </p>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="160" align="center">
+                    <template slot-scope="scope">
+                        <p>
+                            <el-button size="mini" @click="handleShowProduct(scope.$index, scope.row)">查看</el-button>
+                            <el-button size="mini" @click="handleUpdateProduct(scope.$index, scope.row)">编辑</el-button>
+                        </p>
+                        <p>
+                            <el-button size="mini" @click="handleShowLog(scope.$index, scope.row)">日志</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        </p>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <div class="batch-operate-container">
@@ -136,14 +156,39 @@
                         {{getProductSkuSp(scope.row, index)}}
                     </template>
                 </el-table-column>
+                <el-table-column label="销售价格" width="100" align="center">
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.price"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column label="商品库存" width="80" align="center">
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.stock"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column label="库存预警值" width="100" align="center">
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.lowStock"></el-input>
+                    </template>
+                </el-table-column>
             </el-table>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editSkuInfo.dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="handleEditSkuConfirm">确定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import {fetchList, updateNewStatus, updatePublishStatus, updateRecommendStatus} from "../../../api/product";
-    import {fetchList as fetchSkuStockList} from "../../../api/skuStock";
+    import {
+        fetchList,
+        updateDeleteStatus,
+        updateNewStatus,
+        updatePublishStatus,
+        updateRecommendStatus
+    } from "../../../api/product";
+    import {fetchList as fetchSkuStockList, update as updateSkuStockList} from "../../../api/skuStock";
     import {fetchList as fetchProductAttrList} from "../../../api/productAttr";
 
     export default {
@@ -167,6 +212,15 @@
         },
         created() {
             this.getList();
+        },
+        filters: {
+            verifyStatusFilter(value) {
+                if(value === 1) {
+                    return "审核通过";
+                }else {
+                    return "未审核";
+                }
+            }
         },
         methods: {
             getList() {
@@ -243,6 +297,73 @@
                 }else {
                     return row.sp3;
                 }
+            },
+            handleEditSkuConfirm() {
+                if(this.editSkuInfo.stockList==null||this.editSkuInfo.stockList.length<=0) {
+                    this.$message({
+                        message: '暂无sku信息',
+                        type: 'warning',
+                        duration: 1000
+                    });
+                    return;
+                }
+
+                this.$confirm('是否要进行修改', '提示', {
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    updateSkuStockList(this.editSkuInfo.productId, this.editSkuInfo.stockList).then(response=>{
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success',
+                            duration: 1000
+                        });
+                        this.editSkuInfo.dialogVisible=false;
+                    });
+                });
+            },
+            handleSearchEditSku() {
+                fetchSkuStockList(this.editSkuInfo.productId, {keyword:this.editSkuInfo.keyword}).then(response=>{
+                    this.editSkuInfo.stockList=response.data;
+                });
+            },
+            handleShowVerifyDetail(index, row) {
+                console.log("handleShowVerifyDetail", row);
+            },
+            handleShowProduct(index, row) {
+                console.log("handleShowProduct", row)
+            },
+            handleUpdateProduct(index, row) {
+                //TODO 写编辑页面
+                this.$router.push({path:'/pms/updateProduct', query:{id:row.id}});
+            },
+            handleShowLog(index, row) {
+                console.log("handleShowLog", row);
+            },
+            handleDelete(index, row) {
+                this.$confirm('是否要进行删除操作？', "提示", {
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    let ids = [];
+                    ids.push(row.id);
+                    this.updateDeleteStatus(1, ids);
+                });
+            },
+            updateDeleteStatus(deleteStatus, ids) {
+                let params = new URLSearchParams();
+                params.append("ids", ids);
+                params.append("deleteStatus", deleteStatus);
+                updateDeleteStatus(params).then(()=>{
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success',
+                        duration: 1000
+                    });
+                });
+                this.getList();
             }
         }
     }

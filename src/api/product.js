@@ -30,3 +30,11 @@ export function updateRecommendStatus(params) {
         params:params
     })
 }
+
+export function updateDeleteStatus(params) {
+    return request({
+        url: '/product/update/deleteStatus',
+        method: 'post',
+        params: params
+    })
+}
