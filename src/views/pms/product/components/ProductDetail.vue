@@ -119,9 +119,26 @@
             }
         },
         methods: {
-            prevStep(){},
-            nextStep(){},
-            finishCommit(){}
+            prevStep(){
+                if(this.active > 0 && this.active < this.showStatus.length) {
+                    this.active--;
+                    this.hideAll();
+                    this.showStatus[this.active]=true;
+                }
+            },
+            nextStep(){
+                if(this.active < this.showStatus.length - 1) {
+                    this.active++;
+                    this.hideAll();
+                    this.showStatus[this.active]=true;
+                }
+            },
+            finishCommit(){},
+            hideAll() {
+                for (let i = 0; i < this.showStatus.length; i++) {
+                    this.showStatus[i]=false;
+                }
+            }
         }
     }
 </script>
