@@ -4,33 +4,64 @@
             <div>
                 <i class="el-icon-search"></i>
                 <span>筛选搜索</span>
-                <el-button style="float: right" type="primary" size="small">查询结果</el-button>
-                <el-button style="float: right; margin-right: 15px" size="small">重置</el-button>
+                <el-button
+                        style="float: right"
+                        @click="handleSearchList()"
+                        type="primary"
+                        size="small">查询结果</el-button>
+                <el-button
+                        style="float: right; margin-right: 15px"
+                        @click="handleResetSearch()"
+                        size="small">重置</el-button>
             </div>
             <div style="margin-top: 15px">
-                <el-form :inline="true" size="small" label-width="140px">
+                <el-form :inline="true" size="small" label-width="140px" :model="listQuery">
                     <el-form-item label="输入搜索：">
-                        <el-input style="width: 203px" placeholder="商品名称"></el-input>
+                        <el-input style="width: 203px" placeholder="商品名称" v-model="listQuery.keyword"></el-input>
                     </el-form-item>
                     <el-form-item label="商品货号：">
-                        <el-input style="width: 203px" placeholder="商品货号"></el-input>
+                        <el-input style="width: 203px" placeholder="商品货号" v-model="listQuery.productSn"></el-input>
                     </el-form-item>
                     <el-form-item label="商品分类：">
-                        <el-cascader clearable :options="productCateOptions"></el-cascader>
+                        <el-cascader
+                                clearable
+                                v-model="selectProductCateValue"
+                                :options="productCateOptions"></el-cascader>
                     </el-form-item>
                     <el-form-item label="商品品牌：">
-                        <el-select placeholder="请选择品牌" clearable>
-                            <el-option></el-option>
+                        <el-select v-model="listQuery.brandId" placeholder="请选择品牌" clearable>
+                            <el-option
+                                    v-for="item in brandOptions"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                            ></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="上架状态：">
-                        <el-select placeholder="全部" clearable>
-                            <el-option></el-option>
+                        <el-select
+                                placeholder="全部"
+                                v-model="listQuery.publishStatus"
+                                clearable>
+                            <el-option
+                                v-for="item in publishStatusOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审核状态：">
-                        <el-select placeholder="全部">
-                            <el-option></el-option>
+                        <el-select
+                                placeholder="全部"
+                                v-model="listQuery.verifyStatus"
+                                clearable>
+                            <el-option
+                                v-for="item in verifyStatusOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -39,10 +70,18 @@
         <el-card class="operate-container" shadow="never">
             <i class="el-icon-tickets"></i>
             <span>数据列表</span>
-            <el-button class="btn-add" size="mini">添加</el-button>
+            <el-button
+                    class="btn-add"
+                    @click="handleAddProduct()"
+                    size="mini">添加</el-button>
         </el-card>
         <div class="table-container">
-            <el-table ref="productTable" style="width: 100%" border :data="list" v-loading="listLoading">
+            <el-table ref="productTable"
+                      style="width: 100%"
+                      @selection-change="handleSelectionChange"
+                      border
+                      :data="list"
+                      v-loading="listLoading">
                 <el-table-column type="selection" width="60" align="center"></el-table-column>
                 <el-table-column label="编号" width="100" align="center">
                     <template slot-scope="scope">{{scope.row.id}}</template>
@@ -124,15 +163,29 @@
             </el-table>
         </div>
         <div class="batch-operate-container">
-            <el-select size="small" placeholder="批量操作">
-                <el-option></el-option>
+            <el-select size="small" placeholder="批量操作" v-model="operateType">
+                <el-option v-for="item in operates"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"></el-option>
             </el-select>
-            <el-button size="small" style="margin-left: 20px" class="search-button" type="primary">确定</el-button>
+            <el-button size="small"
+                       style="margin-left: 20px"
+                       class="search-button"
+                       type="primary"
+                       @click="handleBatchOperate()"
+            >确定</el-button>
         </div>
         <div class="pagination-container">
-            <el-pagination background
-                           layout="total, sizes,prev, pager, next,jumper"
-                           :page-sizes="[5,10,15]"
+            <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    layout="total, sizes,prev, pager, next,jumper"
+                    :page-size="listQuery.pageSize"
+                    :page-sizes="[5,10,15]"
+                    :current-page.sync="listQuery.pageNum"
+                    :total="total"
             ></el-pagination>
         </div>
         <el-dialog
@@ -190,6 +243,19 @@
     } from "../../../api/product";
     import {fetchList as fetchSkuStockList, update as updateSkuStockList} from "../../../api/skuStock";
     import {fetchList as fetchProductAttrList} from "../../../api/productAttr";
+    import {fetchListWithChildren} from "../../../api/productCate";
+    import {fetchList as fetchBrandList} from "../../../api/brand";
+
+    const defaultListQuery = {
+        keyword: null,
+        pageNum: 1,
+        pageSize: 5,
+        publishStatus: null,
+        verifyStatus: null,
+        productSn: null,
+        productCategoryId: null,
+        brandId: null
+    };
 
     export default {
         name: "productList",
@@ -204,14 +270,78 @@
                     productAttr:[],
                     keyword:null
                 },
-                productCateOptions:[{label: "1",value: "publishOn"},{label: "2",value: "publishOn"},{label: "3",value: "publishOn"}],
+                operates: [
+                    {
+                        label: "商品上架",
+                        value: "publishOn"
+                    },
+                    {
+                        label: "商品下架",
+                        value: "publishOff"
+                    },
+                    {
+                        label: "设为推荐",
+                        value: "recommendOn"
+                    },
+                    {
+                        label: "取消推荐",
+                        value: "recommendOff"
+                    },
+                    {
+                        label: "设为新品",
+                        value: "newOn"
+                    },
+                    {
+                        label: "取消新品",
+                        value: "newOff"
+                    },
+                    {
+                        label: "转移到分类",
+                        value: "transferCategory"
+                    },
+                    {
+                        label: "移入回收站",
+                        value: "recycle"
+                    }
+                ],
+                operateType:null,
                 list: null,
                 listLoading: true,
-                total:null
+                total:null,
+                multipleSelection:[],
+                listQuery: Object.assign({}, defaultListQuery),
+                productCateOptions:[],
+                selectProductCateValue:null,
+                brandOptions:[],
+                publishStatusOptions: [{
+                    value: 1,
+                    label: '上架'
+                }, {
+                    value: 0,
+                    label: '下架'
+                }],
+                verifyStatusOptions: [{
+                    value: 1,
+                    label: '审核通过'
+                }, {
+                    value: 0,
+                    label: '未审核'
+                }]
             }
         },
         created() {
             this.getList();
+            this.getBrandList();
+            this.getProductCateList();
+        },
+        watch:{
+            selectProductCateValue:function (newValue) {
+                if(newValue != null && newValue.length==2) {
+                    this.listQuery.productCategoryId = newValue[1];
+                } else {
+                    this.listQuery.productCategoryId = null;
+                }
+            }
         },
         filters: {
             verifyStatusFilter(value) {
@@ -230,6 +360,30 @@
                     this.list = response.data.list;
                     this.total = response.data.total;
                 })
+            },
+            getBrandList(){
+                fetchBrandList({pageNum:1, pageSize: 100}).then(response => {
+                    this.brandOptions = [];
+                    let brandList = response.data.list;
+                    for (let i = 0; i < brandList.length; i++) {
+                        this.brandOptions.push({label: brandList[i].name, value: brandList[i].id});
+                    }
+                });
+            },
+            getProductCateList(){
+                fetchListWithChildren().then(response=>{
+                    let list = response.data;
+                    this.productCateOptions=[];
+                    for (let i = 0; i < list.length; i++) {
+                        let children = [];
+                        if(list[i].children != null && list[i].children.length>0) {
+                            for(let j=0; j<list[i].children.length;j++) {
+                                children.push({label: list[i].children[j].name, value: list[i].children[j].id});
+                            }
+                        }
+                        this.productCateOptions.push({label: list[i].name, value: list[i].id, children: children});
+                    }
+                });
             },
             updatePublishStatus(publishStatus, ids) {
                 let params = new URLSearchParams();
@@ -335,7 +489,6 @@
                 console.log("handleShowProduct", row)
             },
             handleUpdateProduct(index, row) {
-                //TODO 写编辑页面
                 this.$router.push({path:'/pms/updateProduct', query:{id:row.id}});
             },
             handleShowLog(index, row) {
@@ -364,6 +517,86 @@
                     });
                 });
                 this.getList();
+            },
+            handleBatchOperate() {
+                if(this.operateType==null) {
+                    this.$message({
+                        message: '请选择操作类型',
+                        type: 'warning',
+                        duration: 1000
+                    });
+                    return;
+                }
+
+                if(this.multipleSelection==null||this.multipleSelection.length<=0) {
+                    this.$message({
+                        message: '请选择要操作的商品',
+                        type: 'warning',
+                        duration: 1000
+                    });
+                    return;
+                }
+                this.$confirm('是否要进行该批量操作?', '提示', {
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    let ids=[];
+                    for(let i=0; i<this.multipleSelection.length;i++){
+                        ids.push(this.multipleSelection[i].id);
+                    }
+                    switch (this.operateType) {
+                        case this.operates[0].value:
+                            this.updatePublishStatus(1, ids);
+                            break;
+                        case this.operates[1].value:
+                            this.updatePublishStatus(0, ids);
+                            break;
+                        case this.operates[2].value:
+                            this.updateRecommendStatus(1, ids);
+                            break;
+                        case this.operates[3].value:
+                            this.updateRecommendStatus(0, ids);
+                            break;
+                        case this.operates[4].value:
+                            this.updateNewStatus(1, ids);
+                            break;
+                        case this.operates[5].value:
+                            this.updateNewStatus(0, ids);
+                            break;
+                        case this.operates[6].value:
+                            break;
+                        case this.operates[7].value:
+                            this.updateDeleteStatus(1, ids);
+                            break;
+                        default:
+                            break;
+                    }
+                    this.getList();
+                });
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            handleSizeChange(val) {
+                this.listQuery.pageNum=1;
+                this.listQuery.pageSize=val;
+                this.getList();
+            },
+            handleCurrentChange(val) {
+                this.listQuery.pageNum = val;
+                this.getList();
+            },
+            handleResetSearch() {
+                this.selectProductCateValue = [];
+                this.listQuery = Object.assign({}, defaultListQuery);
+            },
+            handleSearchList() {
+                this.listQuery.pageNum=1;
+                this.getList();
+            },
+            handleAddProduct() {
+                this.$router.push({path:'/pms/addProduct'})
             }
         }
     }
