@@ -455,9 +455,9 @@
     }
 </script>
 <style scoped>
-    .input-width {
-        width: 203px;
-    }
+.input-width {
+    width: 203px;
+}
 </style>
 
 
