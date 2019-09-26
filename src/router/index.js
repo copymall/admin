@@ -45,6 +45,11 @@ export const constantRouterMap = [
             name:'productCate',
             component:()=>import('@/views/pms/productCate/index'),
             meta:{title:'商品分类',icon:'product-cate'}
+        }, {
+            path:'productAttr',
+            name:'productAttr',
+            component:()=>import('@/views/pms/productAttr/index'),
+            meta:{title:'商品类型', icon:'product-attr'}
         }]
     },
     {
