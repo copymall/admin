@@ -41,6 +41,7 @@
     import ProductSaleDetail from "./ProductSaleDetail";
     import ProductAttrDetail from "./ProductAttrDetail";
     import ProductRelationDetail from "./ProductRelationDetail";
+    import {createProduct, updateProduct} from "../../../../api/product";
 
     const defaultProductParam = {
         albumPics: '',
@@ -133,7 +134,33 @@
                     this.showStatus[this.active]=true;
                 }
             },
-            finishCommit(){},
+            finishCommit(isEdit){
+                this.$confirm('是否要提交该产品', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    if(isEdit){
+                        updateProduct(this.$router.query.id, this.productParam).then(response=>{
+                            this.$message({
+                                type: 'success',
+                                message: '提交成功',
+                                duration: 1000
+                            });
+                            this.$router.back();
+                        });
+                    }else {
+                        createProduct(this.productParam).then(reponse=>{
+                            this.$message({
+                                type:'success',
+                                message:'提交成功',
+                                duration: 1000
+                            });
+                            location.reload();
+                        })
+                    }
+                })
+            },
             hideAll() {
                 for (let i = 0; i < this.showStatus.length; i++) {
                     this.showStatus[i]=false;
