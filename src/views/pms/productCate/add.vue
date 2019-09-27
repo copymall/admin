@@ -1,10 +1,12 @@
 <template>
-    <div>addaddaddadd</div>
+    <product-cate-detail :is-edit="false"></product-cate-detail>
 </template>
 
 <script>
+    import ProductCateDetail from "./components/ProductCateDetail";
     export default {
-        name: "addProductCate"
+        name: "addProductCate",
+        components: {ProductCateDetail}
     }
 </script>
 

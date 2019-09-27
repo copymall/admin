@@ -1,10 +1,12 @@
 <template>
-    <div>update.vueupdate.vueupdate.vue</div>
+    <product-cate-detail :is-edit="true"></product-cate-detail>
 </template>
 
 <script>
+    import ProductCateDetail from "./components/ProductCateDetail";
     export default {
-        name: "updateProductCate"
+        name: "updateProductCate",
+        components: {ProductCateDetail}
     }
 </script>
 
