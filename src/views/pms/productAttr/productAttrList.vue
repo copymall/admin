@@ -87,8 +87,14 @@
                    this.total = response.data.total;
                 });
             },
-            handleUpdate(index, row) {},
-            handleDelete(index, row){},
+            handleUpdate(index, row) {
+                this.$router.push({path:'/pms/updateProductAttr', query:{id:row.id}});
+            },
+            handleDelete(index, row){
+                let ids = [];
+                ids.push(row.id);
+                this.handleDeleteProductAttr(ids);
+            },
             handleBatchOperate(){
                 if(this.multipleSelection.length < 1) {
                     this.$message({

@@ -1,11 +1,11 @@
 <template>
-    <product-attr-detail :is-edit='false'></product-attr-detail>
+    <product-attr-detail :is-edit='true'></product-attr-detail>
 </template>
 
 <script>
     import ProductAttrDetail from "./components/ProductAttrDetail";
     export default {
-        name: "addProductAttr",
+        name: "updateProductAttr",
         components: {ProductAttrDetail}
     }
 </script>
