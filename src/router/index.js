@@ -80,6 +80,23 @@ export const constantRouterMap = [
             component:()=>import("@/views/pms/productAttr/updateProductAttr"),
             meta:{title:'修改商品属性'},
             hidden:true
+        },{
+            path:'brand',
+            name:'brand',
+            component:()=>import('@/views/pms/brand/index'),
+            meta:{title:'品牌管理', icon:'product-brand'}
+        }, {
+            path:'addBrand',
+            name:'addBrand',
+            component:()=>import('@/views/pms/brand/add'),
+            meta:{title:'添加品牌'},
+            hidden:true
+        }, {
+            path:'updateBrand',
+            name:'updateBrand',
+            component:()=>import('@/views/pms/brand/update'),
+            meta:{title:'编辑品牌'},
+            hidden:true
         }]
     },
     {
