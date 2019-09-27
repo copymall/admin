@@ -7,10 +7,10 @@
                     :active="6"
                     finish-status="success"
                     space="50px">
-            <el-steps   v-for="item in logisticsList"
+            <el-step   v-for="item in logisticsList"
                         :key="item.name"
                         :title="item.name"
-                        :description="item.time"></el-steps>
+                        :description="item.time"></el-step>
         </el-steps>
     </el-dialog>
 </template>
