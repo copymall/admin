@@ -1,10 +1,191 @@
 <template>
-    <div>2222222222222222222</div>
+    <div class="app-container">
+        <el-card class="operate-container" shadow="never">
+            <i class="el-icon-tickets" style="margin-top: 5px"></i>
+            <span style="margin-top: 5px;">数据列表</span>
+            <el-button class="btn-add" @click="addProductAttr()" size="mini">添加</el-button>
+        </el-card>
+        <div class="table-container">
+            <el-table ref="productAttrTable"
+                      style="width: 100%"
+                      @selection-change="handleSelectionChange"
+                      :data="list"
+                      v-loading="listLoading"
+                      border>
+                <el-table-column type="selection" width="60" align="center"></el-table-column>
+                <el-table-column label="编号" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.id}}</template>
+                </el-table-column>
+                <el-table-column label="属性名称" width="140" align="center">
+                    <template slot-scope="scope">{{scope.row.name}}</template>
+                </el-table-column>
+                <el-table-column label="商品类型" width="140" align="center">
+                    <template slot-scope="scope">{{$route.query.cname}}</template>
+                </el-table-column>
+                <el-table-column label="属性是否可选" width="120" align="center">
+                    <template slot-scope="scope">{{scope.row.selectType|selectTypeFilter}}</template>
+                </el-table-column>
+                <el-table-column label="属性值得录入方式" width="150" align="center">
+                    <template slot-scope="scope">{{scope.row.inputType|inputTypeFilter}}</template>
+                </el-table-column>
+                <el-table-column label="可选值列表" align="center">
+                    <template slot-scope="scope">{{scope.row.inputList}}</template>
+                </el-table-column>
+                <el-table-column label="排序" width="100" align="center">
+                    <template slot-scope="scope">{{scope.row.sort}}</template>
+                </el-table-column>
+                <el-table-column label="操作" width="200" align="center">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="batch-operate-container">
+            <el-select size="small"
+                       v-model="operateType"
+                       placeholder="批量操作">
+                <el-option v-for="item in operates"
+                           :label="item.label"
+                           :value="item.value"
+                           :key="item.value"></el-option>
+            </el-select>
+            <el-button style="margin-left: 20px"
+                       class="search-button"
+                       @click="handleBatchOperate()"
+                       type="primary"
+                       size="small">确定</el-button>
+        </div>
+        <div class="pagination-container">
+            <el-pagination background
+                           @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page.sync="listQuery.pageNum"
+                           :page-size="listQuery.pageSize"
+                           :total="total"
+                           layout="total, sizes,prev, pager, next,jumper"
+                           :page-sizes="[5,10,15]"></el-pagination>
+        </div>
+    </div>
 </template>
 
 <script>
+    import {deleteProductAttr, fetchList} from "../../../api/productAttr";
+
     export default {
-        name: "productAttrList"
+        name: "productAttrList",
+        methods: {
+            addProductAttr(){
+                this.$router.push({path:'/pms/addProductAttr', query:{cid:this.$route.query.cid, type:this.$route.query.type}});
+            },
+            getList() {
+                this.listLoading = true;
+                fetchList(this.$route.query.cid, this.listQuery).then(response=>{
+                   this.listLoading = false;
+                   this.list = response.data.list;
+                   this.total = response.data.total;
+                });
+            },
+            handleUpdate(index, row) {},
+            handleDelete(index, row){},
+            handleBatchOperate(){
+                if(this.multipleSelection.length < 1) {
+                    this.$message({
+                        message: '请选择一条记录',
+                        type: 'warning',
+                        duration: 1000
+                    });
+                    return;
+                }
+
+                if(this.operateType !== "deleteProductAttr") {
+                    this.$message({
+                        message: '请选择批量操作类型',
+                        type: 'warning',
+                        duration: 1000
+                    });
+                    return;
+                }
+
+                let ids = [];
+
+                for (let i = 0; i < this.multipleSelection.length; i++) {
+                    ids.push(this.multipleSelection[i].id);
+                }
+
+                this.handleDeleteProductAttr(ids);
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            handleDeleteProductAttr(ids){
+                this.$confirm('是否要删除该属性', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    let data = new URLSearchParams();
+                    data.append("ids", ids);
+                    deleteProductAttr(data).then(response=>{
+                        this.$message({
+                            message: '删除成功',
+                            type: 'success',
+                            duration: 1000
+                        });
+                        this.getList();
+                    });
+                });
+            },
+            handleSizeChange(val) {
+                this.listQuery.pageSize = val;
+                this.listQuery.pageNum = 1;
+                this.getList();
+            },
+            handleCurrentChange(val) {
+                this.listQuery.pageNum = val;
+                this.getList();
+            }
+        },
+        data() {
+            return {
+                listLoading: true,
+                list:null,
+                listQuery:{
+                    pageSize:5,
+                    pageNum:1,
+                    type: this.$route.query.type
+                },
+                total:null,
+                operateType:null,
+                operates:[{
+                    label:"删除",
+                    value:'deleteProductAttr'
+                }],
+                multipleSelection:[]
+            }
+        },
+        created() {
+            this.getList();
+        },
+        filters: {
+            selectTypeFilter(value) {
+                if (value === 1) {
+                    return '单选';
+                } else if (value === 2) {
+                    return '多选';
+                } else {
+                    return '唯一'
+                }
+            },
+            inputTypeFilter(value) {
+                if (value === 1) {
+                    return '从列表中选取';
+                } else {
+                    return '手工录入'
+                }
+            }
+        }
     }
 </script>
 

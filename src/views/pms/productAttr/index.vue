@@ -95,7 +95,7 @@
                 this.$router.push({path:'/pms/productAttrList', query: {cid:row.id, cname:row.name, type:0}});
             },
             getParamList(index, row){
-                this.$router.push({path:'/pms/productAttrList', query: {cid: row.id, cname: row.name, type:0}});
+                this.$router.push({path:'/pms/productAttrList', query: {cid: row.id, cname: row.name, type:1}});
             },
             handleSizeChange(val){
                 this.listQuery.pageSize = val;

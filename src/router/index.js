@@ -68,6 +68,12 @@ export const constantRouterMap = [
             component: ()=>import('@/views/pms/productAttr/productAttrList'),
             meta:{title:'商品属性列表'},
             hidden: true
+        }, {
+            path:'addProductAttr',
+            name:'addProductAttr',
+            component:()=>import('@/views/pms/productAttr/addProductAttr'),
+            meta:{title:'添加商品属性'},
+            hidden:true
         }]
     },
     {

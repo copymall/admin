@@ -7,3 +7,11 @@ export function fetchList(cid, params) {
         params:params
     })
 }
+
+export function deleteProductAttr(data) {
+    return request({
+        url:'/productAttribute/delete',
+        method:'post',
+        data:data
+    })
+}
