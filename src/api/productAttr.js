@@ -38,3 +38,11 @@ export function updateProductAttr(id, data) {
         data:data
     })
 }
+
+export function getProductAttrInfo(productCategoryId) {
+    return request({
+        url:'/productAttribute/attrInfo/'+productCategoryId,
+        method:'get'
+    })
+    
+}
