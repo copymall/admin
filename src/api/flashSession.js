@@ -38,3 +38,11 @@ export function deleteSession(id) {
         method:'post'
     })
 }
+
+export function fetchSelectList(params) {
+    return request({
+        url:'/flashSession/selectList',
+        method:'get',
+        params:params
+    })
+}
