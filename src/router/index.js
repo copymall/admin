@@ -146,6 +146,20 @@ export const constantRouterMap = [
                 name:'flash',
                 component:()=>import('@/views/sms/flash/index'),
                 meta:{title:'秒杀活动列表', icon:"sms-flash"}
+            },
+            {
+                path:'flashSession',
+                name:'flashSession',
+                component:()=>import('@/views/sms/flash/sessionList'),
+                meta:{title:'秒杀时间段列表'},
+                hidden:true
+            },
+            {
+                path:'selectSession',
+                name:'selectSession',
+                component:()=>import('@/views/sms/flash/selectSessionList'),
+                meta:{title:'秒杀时间段列表'},
+                hidden:true
             }
         ]
     }
