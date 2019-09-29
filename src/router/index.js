@@ -160,12 +160,19 @@ export const constantRouterMap = [
                 component:()=>import('@/views/sms/flash/selectSessionList'),
                 meta:{title:'秒杀时间段列表'},
                 hidden:true
-            }, {
+            },
+            {
                 path:'flashProductRelation',
                 name:'flashProductRelation',
                 component:()=>import('@/views/sms/flash/productRelationList'),
                 meta:{title:'秒杀商品列表'},
                 hidden:true
+            },
+            {
+                path:'coupon',
+                name:'coupon',
+                component:()=>import('@/views/sms/coupon/index'),
+                meta:{title:'优惠券列表', icon:"sms-coupon"}
             }
         ]
     }

@@ -15,13 +15,13 @@
                 </el-form>
             </div>
         </el-card>
-        <el-card class="operate-container">
+        <el-card class="operate-container" shadow="never">
             <i class="el-icon-tickets"></i>
             <span>数据列表</span>
             <el-button size="mini" class="btn-add" style="margin-left: 15px" @click="handleAdd()">添加活动</el-button>
             <el-button size="mini" class="btn-add" @click="handleShowSessionList()">秒杀时间段列表</el-button>
         </el-card>
-        <el-card class="table-container">
+        <el-card class="table-container" shadow="never">
             <el-table ref="flashTable"
                       style="width: 100%"
                       :data="list"
