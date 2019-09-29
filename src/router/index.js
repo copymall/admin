@@ -133,6 +133,21 @@ export const constantRouterMap = [
                 meta: {title: '订单设置', icon: 'order-setting'}
             },
         ]
+    },
+    {
+        path:'/sms',
+        component:Layout,
+        redirect:'/sms/coupon',
+        name:'sms',
+        meta:{title: '营销', icon: 'sms'},
+        children:[
+            {
+                path:'flash',
+                name:'flash',
+                component:()=>import('@/views/sms/flash/index'),
+                meta:{title:'秒杀活动列表', icon:"sms-flash"}
+            }
+        ]
     }
 ]
 
