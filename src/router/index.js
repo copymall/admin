@@ -132,6 +132,12 @@ export const constantRouterMap = [
                 component: () => import('@/views/oms/order/setting'),
                 meta: {title: '订单设置', icon: 'order-setting'}
             },
+            {
+                path:'returnApply',
+                name:'returnApply',
+                component:()=>import('@/views/oms/apply/index'),
+                meta:{title:'退货申请处理',icon:'order-return'}
+            },
         ]
     },
     {
