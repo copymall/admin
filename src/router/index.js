@@ -213,6 +213,12 @@ export const constantRouterMap = [
                 component:()=>import('@/views/sms/coupon/history'),
                 meta:{title:'优惠券领取详情'},
                 hidden:true
+            },
+            {
+                path:'advertise',
+                name:'homeAdvertise',
+                component:()=>import('@/views/sms/advertise/index'),
+                meta:{title:'广告列表',icon:'sms-ad'}
             }
         ]
     }
