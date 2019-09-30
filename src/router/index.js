@@ -192,6 +192,20 @@ export const constantRouterMap = [
                 name:'coupon',
                 component:()=>import('@/views/sms/coupon/index'),
                 meta:{title:'优惠券列表', icon:"sms-coupon"}
+            },
+            {
+                path:'addCoupon',
+                name:'addCoupon',
+                component:()=>import('@/views/sms/coupon/add'),
+                meta:{title:'优惠券列表'},
+                hidden:true
+            },
+            {
+                path:'updateCoupon',
+                name:'updateCoupon',
+                component:()=>import('@/views/sms/coupon/update'),
+                meta:{title:'修改优惠券'},
+                hidden:true
             }
         ]
     }

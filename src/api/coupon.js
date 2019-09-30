@@ -14,3 +14,26 @@ export function deleteCoupon(id) {
         method:'post'
     })
 }
+
+export function updateCoupon(id, data) {
+    return request({
+        url:'/coupon/update/'+id,
+        method:'post',
+        data: data
+    })
+}
+
+export function createCoupon(data) {
+    return request({
+        url:'/coupon/create',
+        method:'post',
+        data:data
+    })
+}
+
+export function getCoupon(id) {
+    return request({
+        url:'/coupon/'+id,
+        method:'get'
+    })
+}
