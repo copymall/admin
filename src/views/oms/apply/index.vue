@@ -63,7 +63,7 @@
                 <el-table-column label="申请时间" width="180" align="center">
                     <template slot-scope="scope">{{scope.row.createTime | formatTime}}</template>
                 </el-table-column>
-                <el-table-column label="用户账户" width="180" align="center">
+                <el-table-column label="用户账户" width="60" align="center">
                     <template slot-scope="scope">{{scope.row.memberUsername}}</template>
                 </el-table-column>
                 <el-table-column label="退款金额" width="180" align="center">
