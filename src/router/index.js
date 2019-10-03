@@ -215,6 +215,12 @@ export const constantRouterMap = [
                 hidden:true
             },
             {
+                path:'brand',
+                home:'homeBrand',
+                component:()=>import('@/views/sms/brand/index'),
+                meta:{title:'品牌推荐', icon:'product-brand'}
+            },
+            {
                 path:'advertise',
                 name:'homeAdvertise',
                 component:()=>import('@/views/sms/advertise/index'),
