@@ -221,6 +221,12 @@ export const constantRouterMap = [
                 meta:{title:'品牌推荐', icon:'product-brand'}
             },
             {
+                path:'new',
+                home:'homeNew',
+                component:()=>import('@/views/sms/new/index'),
+                meta:{title:'新品推荐', icon:'sms-new'}
+            },
+            {
                 path:'advertise',
                 name:'homeAdvertise',
                 component:()=>import('@/views/sms/advertise/index'),
