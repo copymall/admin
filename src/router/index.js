@@ -231,6 +231,13 @@ export const constantRouterMap = [
                 name:'homeAdvertise',
                 component:()=>import('@/views/sms/advertise/index'),
                 meta:{title:'广告列表',icon:'sms-ad'}
+            },
+            {
+                path:'addAdvertise',
+                name:'addHomeAdvertise',
+                component:()=>import('@/views/sms/advertise/add'),
+                meta:{title:'添加广告'},
+                hidden:true
             }
         ]
     }
