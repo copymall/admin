@@ -227,6 +227,12 @@ export const constantRouterMap = [
                 meta:{title:'新品推荐', icon:'sms-new'}
             },
             {
+                path:'hot',
+                name:'homeHot',
+                component:()=>import('@/views/sms/hot/index'),
+                meta:{title:'人气推荐',icon:'sms-hot'}
+            },
+            {
                 path: 'subject',
                 name: 'homeSubject',
                 component: () => import('@/views/sms/subject/index'),
