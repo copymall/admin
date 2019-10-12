@@ -8,6 +8,7 @@ import Login from  '../views/login'
 
 export const constantRouterMap = [
     {path: '/login', component: Login, hidden: true},
+    {path:'/404', component:()=>import('@/views/404'), hidden:true},
     {
         path:'',
         component: Layout,
@@ -259,7 +260,8 @@ export const constantRouterMap = [
                 hidden:true
             }
         ]
-    }
+    },
+    {path:"*", redirect:'/404', hidden:true}
 ]
 
 export default new Router({
